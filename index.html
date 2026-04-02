@@ -959,11 +959,13 @@ const defaultState = {
   purchases: [],
   incidents: [],
   hazards: [],
-  farmInfo: {nait:'446419', pgg:'1225990'},
   const state = loadState();
-  if (!state.farmInfo) state.farmInfo = {};
-if (!state.farmInfo.nait) state.farmInfo.nait = '446419';
-if (!state.farmInfo.pgg) state.farmInfo.pgg = '1225990';
+
+if (!state.farmInfo) state.farmInfo = {};
+
+if (!Array.isArray(state.widgetOrder) || !state.widgetOrder.length) {
+  state.widgetOrder = ['stock','revenue','farminfo','map','jobs','calendar'];
+}
 };
 window.saveFarmInfo = function(){
   if (!state.farmInfo) state.farmInfo = {};
@@ -978,9 +980,7 @@ window.saveFarmInfo = function(){
   renderDashboard();
   populateFarmInfoInputs();
 
-  if (typeof toast === 'function') {
-    toast('Farm info saved.');
-  }
+  if (typeof toast === 'function') toast('Farm info saved.');
 };
 
 function populateFarmInfoInputs(){
@@ -1465,9 +1465,8 @@ function renderDashboard(){
     },
     farminfo: {
       id:'farminfo', title:'Farm Info', tab:'dashboard', render: () => `
-        <div class="summary-card"><strong>NAIT Number</strong><span>${esc(state.farmInfo.nait || '446419')}</span></div>
-        <div style="height:10px"></div>
-        <div class="summary-card"><strong>PGG Wrightson Client No.</strong><span>${esc(state.farmInfo.pgg || '1225990')}</span></div>`
+<div class="summary-card"><strong>NAIT Number</strong><span>${esc(state.farmInfo?.nait || '')}</span></div>
+<div class="summary-card"><strong>PGG Wrightson Client No.</strong><span>${esc(state.farmInfo?.pgg || '')}</span></div>
     },
     map: {
       id:'map', title:'Farm Map', tab:'map', render: () => `

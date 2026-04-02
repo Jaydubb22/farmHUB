@@ -475,6 +475,22 @@ flex-wrap:nowrap;
   <img src="settings-icon.png" alt="Settings" style="width:84px;height:84px;object-fit:contain;">
 </button>
 </div>
+  <div class="panel" id="farmSettingsPanel" style="margin-bottom:14px;">
+  <div class="panel-head">
+    <h3>Farm Settings</h3>
+  </div>
+  <div class="panel-body">
+    <div class="field">
+      <label>NAIT Number</label>
+      <input id="farmNaitInput" type="text" placeholder="Enter NAIT number">
+    </div>
+    <div class="field">
+      <label>PGG Wrightson Client No.</label>
+      <input id="farmPggInput" type="text" placeholder="Enter PGG client number">
+    </div>
+    <button class="btn btn-primary" type="button" onclick="saveFarmInfo()">Save Farm Info</button>
+  </div>
+</div>
 <div class="widget-grid" id="widgetGrid"></div>
 <div class="dashboard-note" id="dashboardCustomizeNote" style="display:none">Customise mode is on. Drag widgets by the header. Tap the gear again to finish.</div>
 </section>
@@ -943,13 +959,37 @@ const defaultState = {
   purchases: [],
   incidents: [],
   hazards: [],
-  farmInfo: {nait:'446419', pgg:'1225990'}
+  farmInfo: {nait:'446419', pgg:'1225990'},
   const state = loadState();
   if (!state.farmInfo) state.farmInfo = {};
 if (!state.farmInfo.nait) state.farmInfo.nait = '446419';
 if (!state.farmInfo.pgg) state.farmInfo.pgg = '1225990';
 };
+window.saveFarmInfo = function(){
+  if (!state.farmInfo) state.farmInfo = {};
 
+  const naitInput = document.getElementById('farmNaitInput');
+  const pggInput = document.getElementById('farmPggInput');
+
+  state.farmInfo.nait = naitInput ? naitInput.value.trim() : '';
+  state.farmInfo.pgg = pggInput ? pggInput.value.trim() : '';
+
+  saveAll();
+  renderDashboard();
+  populateFarmInfoInputs();
+
+  if (typeof toast === 'function') {
+    toast('Farm info saved.');
+  }
+};
+
+function populateFarmInfoInputs(){
+  const naitInput = document.getElementById('farmNaitInput');
+  const pggInput = document.getElementById('farmPggInput');
+
+  if (naitInput) naitInput.value = state.farmInfo?.nait || '';
+  if (pggInput) pggInput.value = state.farmInfo?.pgg || '';
+}
 const workers = ['Jess','Willie','Worker 1'];
 const sheepClasses = ['2Tooth Ewes','Mixed Aged Ewes','5yr & 6yr Ewes','Lambs','Rams'];
 const cattleClasses = ['Mixed Aged Cows','Rising 1yr Heifers','Rising 2yr Heifers','Rising 3yr Heifers','Rising 1yr Steers','Bulls'];
@@ -1463,6 +1503,9 @@ function renderDashboard(){
       <div>${w.render()}</div>
     </div>`;
   }).join('');
+
+  populateFarmInfoInputs();
+
 
   const widgetsEls = grid.querySelectorAll('.widget');
   let active = null, offsetX = 0, offsetY = 0;

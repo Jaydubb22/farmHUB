@@ -944,7 +944,6 @@ const defaultState = {
   followTracking: true,
   trackingTrail: [],
   lastKnownLocation: null,
-  calendarMonthOffset: 0,
   messages: [],
   jobs: [],
   health: [],
@@ -955,11 +954,11 @@ const defaultState = {
   visitors: [],
   hazards: [],
   purchases: [],
-  purchases: [],
-  purchases: [],
   incidents: [],
-  hazards: [],
-  const state = loadState();
+  farmInfo: { nait:'', pgg:'' }
+};
+
+const state = loadState();
 
 if (!state.farmInfo) state.farmInfo = {};
 

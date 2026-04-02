@@ -1,7 +1,6 @@
 # farmHUB™
 
-# farmHUB™ 
-is a private, all-in-one farm management platform built specifically for New Zealand farming operations.
+farmHUB™ is a private, all-in-one farm management platform built specifically for New Zealand farming operations.
 
 It integrates stock management, job tracking, animal health records, sales performance, and GPS-based farm mapping into a single, multi-platform system. Designed for real-world rural conditions, farmHUB™ prioritises reliability, real-time coordination, and future offline-first capability.
 

@@ -1473,62 +1473,96 @@ function renderDashboard(){
   const sheepTotal = state.tallies.filter(t => t.stockType === 'Sheep').reduce((s,t)=>s+Number(t.count||0),0);
 
   const widgets = {
-    stock: {
-      id:'stock', title:'Stock Count', tab:'stock', render: () => `
-        <div class="grid two">
-          <div class="summary-card"><strong>Cattle</strong><span>${cattleTotal}</span></div>
-          <div class="summary-card"><strong>Sheep</strong><span>${sheepTotal}</span></div>
-        </div>`
-    },
-    revenue: {
-      id:'revenue', title:'Sales Revenue', tab:'sales', render: () => `
-        <div class="grid two">
-          <div class="summary-card"><strong>Stock Sold Amount</strong><span>${totalHeadSold}</span></div>
-          <div class="summary-card"><strong>Total Revenue</strong><span>${fmtMoney(totalRevenue)}</span></div>
-        </div>`
-    },
-  farminfo: {
-  id:'farminfo',
-  title:'Farm Info',
-  tab:'dashboard',
-  render: () => `
-    <div class="summary-card"><strong>NAIT Number</strong><span>${esc(state.farmInfo?.nait || '')}</span></div>
-    <div class="summary-card"><strong>PGG Wrightson Client No.</strong><span>${esc(state.farmInfo?.pgg || '')}</span></div>
-  `
-},
-map: {
-  id:'map',
-  title:'Farm Map',
-  tab:'map',
-  render: () => `
-    <div class="summary-card" style="padding:8px">
-      <div style="width:100%;height:112px;border-radius:12px;overflow:hidden;background:#eef2ff;border:1px solid #c7d2ff">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." style="width:100%;height:100%;object-fit:cover;display:block;">
-      </div>
-      <div style="height:10px"></div>
+  stock: {
+    id:'stock',
+    title:'Stock Count',
+    tab:'stock',
+    render: () => `
       <div class="grid two">
-        <div class="summary-card"><strong>Paddocks</strong><span>${paddockNames.length}</span></div>
-        <div class="summary-card"><strong>Selected</strong><span>${esc(state.selectedPaddock || 'None')}</span></div>
+        <div class="summary-card"><strong>Cattle</strong><span>${cattleTotal}</span></div>
+        <div class="summary-card"><strong>Sheep</strong><span>${sheepTotal}</span></div>
       </div>
-    </div>
-  `
-},
-jobs: {
-  id:'jobs',
-  title:'Jobs',
-  tab:'jobs',
-  render: () => openJobs.length
-    ? openJobs.slice(0,4).map(j => `<div class="list-item"><div><h4>${esc(j.title)}</h4><p>${esc(j.worker)} · ${esc(j.status)}</p></div><div class="list-right"><strong>${fmtDate(j.due)}</strong></div></div>`).join('')
-    : `<div class="empty">No open jobs.</div>`
-},
-calendar: {
-  id:'calendar',
-  title:'Calendar',
-  tab:'calendar',
-  render: () => upcoming.length
-    ? upcoming.map(e => `<div class="list-item"><div><h4>${esc(e.title)}</h4><p>${esc(e.type)}</p></div><div class="list-right"><strong>${fmtDate(e.date)}</strong></div></div>`).join('')
-    : `<div class="empty">No upcoming events.</div>`
-},
+    `
+  },
+
+  revenue: {
+    id:'revenue',
+    title:'Sales Revenue',
+    tab:'sales',
+    render: () => `
+      <div class="grid two">
+        <div class="summary-card"><strong>Stock Sold Amount</strong><span>${totalHeadSold}</span></div>
+        <div class="summary-card"><strong>Total Revenue</strong><span>${fmtMoney(totalRevenue)}</span></div>
+      </div>
+    `
+  },
+
+  farminfo: {
+    id:'farminfo',
+    title:'Farm Info',
+    tab:'dashboard',
+    render: () => `
+      <div class="summary-card"><strong>NAIT Number</strong><span>${esc(state.farmInfo?.nait || '')}</span></div>
+      <div class="summary-card"><strong>PGG Wrightson Client No.</strong><span>${esc(state.farmInfo?.pgg || '')}</span></div>
+    `
+  },
+
+  map: {
+    id:'map',
+    title:'Farm Map',
+    tab:'map',
+    render: () => `
+      <div class="summary-card" style="padding:8px">
+        <div style="width:100%;height:112px;border-radius:12px;overflow:hidden;background:#eef2ff;border:1px solid #c7d2ff;display:flex;align-items:center;justify-content:center;font-weight:700;color:#1f4fbf;">
+          Farm map preview
+        </div>
+        <div style="height:10px"></div>
+        <div class="grid two">
+          <div class="summary-card"><strong>Paddocks</strong><span>${paddockNames.length}</span></div>
+          <div class="summary-card"><strong>Selected</strong><span>${esc(state.selectedPaddock || 'None')}</span></div>
+        </div>
+      </div>
+    `
+  },
+
+  jobs: {
+    id:'jobs',
+    title:'Jobs',
+    tab:'jobs',
+    render: () => openJobs.length
+      ? openJobs.slice(0,4).map(j => `
+          <div class="list-item">
+            <div>
+              <h4>${esc(j.title)}</h4>
+              <p>${esc(j.worker)} · ${esc(j.status)}</p>
+            </div>
+            <div class="list-right">
+              <strong>${fmtDate(j.due)}</strong>
+            </div>
+          </div>
+        `).join('')
+      : `<div class="empty">No open jobs.</div>`
+  },
+
+  calendar: {
+    id:'calendar',
+    title:'Calendar',
+    tab:'calendar',
+    render: () => upcoming.length
+      ? upcoming.map(e => `
+          <div class="list-item">
+            <div>
+              <h4>${esc(e.title)}</h4>
+              <p>${esc(e.type)}</p>
+            </div>
+            <div class="list-right">
+              <strong>${fmtDate(e.date)}</strong>
+            </div>
+          </div>
+        `).join('')
+      : `<div class="empty">No upcoming events.</div>`
+  }
+};
 
   const ordered = state.widgetOrder.filter(id => widgets[id]).map(id => widgets[id]);
   const grid = $('widgetGrid');

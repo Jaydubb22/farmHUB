@@ -1487,14 +1487,20 @@ function renderDashboard(){
           <div class="summary-card"><strong>Total Revenue</strong><span>${fmtMoney(totalRevenue)}</span></div>
         </div>`
     },
-    farminfo: {
-  id:'farminfo', title:'Farm Info', tab:'dashboard', render: () => `
+  farminfo: {
+  id:'farminfo',
+  title:'Farm Info',
+  tab:'dashboard',
+  render: () => `
     <div class="summary-card"><strong>NAIT Number</strong><span>${esc(state.farmInfo?.nait || '')}</span></div>
     <div class="summary-card"><strong>PGG Wrightson Client No.</strong><span>${esc(state.farmInfo?.pgg || '')}</span></div>
   `
 },
- map: {
-  id:'map', title:'Farm Map', tab:'map', render: () => `
+map: {
+  id:'map',
+  title:'Farm Map',
+  tab:'map',
+  render: () => `
     <div class="summary-card" style="padding:8px">
       <div style="width:100%;height:112px;border-radius:12px;overflow:hidden;background:#eef2ff;border:1px solid #c7d2ff">
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..." style="width:100%;height:100%;object-fit:cover;display:block;">
@@ -1507,14 +1513,22 @@ function renderDashboard(){
     </div>
   `
 },
-    },
-    jobs: {
-      id:'jobs', title:'Jobs', tab:'jobs', render: () => openJobs.length ? openJobs.slice(0,4).map(j => `<div class="list-item"><div><h4>${esc(j.title)}</h4><p>${esc(j.worker)} · ${esc(j.status)}</p></div><div class="list-right"><strong>${fmtDate(j.due)}</strong></div></div>`).join('') : '<div class="empty">No open jobs.</div>'
-    },
-    calendar: {
-      id:'calendar', title:'Calendar', tab:'calendar', render: () => upcoming.length ? upcoming.map(e => `<div class="list-item"><div><h4>${esc(e.title)}</h4><p>${esc(e.type)}</p></div><div class="list-right"><strong>${fmtDate(e.date)}</strong></div></div>`).join('') : '<div class="empty">No upcoming events.</div>'
-    }
-  };
+jobs: {
+  id:'jobs',
+  title:'Jobs',
+  tab:'jobs',
+  render: () => openJobs.length
+    ? openJobs.slice(0,4).map(j => `<div class="list-item"><div><h4>${esc(j.title)}</h4><p>${esc(j.worker)} · ${esc(j.status)}</p></div><div class="list-right"><strong>${fmtDate(j.due)}</strong></div></div>`).join('')
+    : `<div class="empty">No open jobs.</div>`
+},
+calendar: {
+  id:'calendar',
+  title:'Calendar',
+  tab:'calendar',
+  render: () => upcoming.length
+    ? upcoming.map(e => `<div class="list-item"><div><h4>${esc(e.title)}</h4><p>${esc(e.type)}</p></div><div class="list-right"><strong>${fmtDate(e.date)}</strong></div></div>`).join('')
+    : `<div class="empty">No upcoming events.</div>`
+},
 
   const ordered = state.widgetOrder.filter(id => widgets[id]).map(id => widgets[id]);
   const grid = $('widgetGrid');

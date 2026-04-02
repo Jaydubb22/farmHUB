@@ -471,7 +471,9 @@ flex-wrap:nowrap;
 <div><h2>Dashboard</h2></div>
 </div>
 <div class="dashboard-toolbar">
-<button class="icon-btn" id="customizeDashboardBtn" title="Customise dashboard" type="button">⚙️</button>
+<button class="icon-btn" id="customizeDashboardBtn" title="Customise dashboard" type="button">
+  <img src="settings-icon.png" alt="Settings" style="width:18px;height:18px;object-fit:contain;">
+</button>
 </div>
 <div class="widget-grid" id="widgetGrid"></div>
 <div class="dashboard-note" id="dashboardCustomizeNote" style="display:none">Customise mode is on. Drag widgets by the header. Tap the gear again to finish.</div>
@@ -941,7 +943,7 @@ const defaultState = {
   purchases: [],
   incidents: [],
   hazards: [],
-  farmInfo: {nait:'446419', pgg:''}
+  farmInfo: {nait:'446419', pgg:'1225990'}
 };
 
 const workers = ['Jess','Willie','Worker 1'];

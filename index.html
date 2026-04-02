@@ -944,6 +944,10 @@ const defaultState = {
   incidents: [],
   hazards: [],
   farmInfo: {nait:'446419', pgg:'1225990'}
+  const state = loadState();
+  if (!state.farmInfo) state.farmInfo = {};
+if (!state.farmInfo.nait) state.farmInfo.nait = '446419';
+if (!state.farmInfo.pgg) state.farmInfo.pgg = '1225990';
 };
 
 const workers = ['Jess','Willie','Worker 1'];

@@ -1,10 +1,11 @@
-#farmHUB™
+# farmHUB™
 
-farmHUB™ is a private, all-in-one farm management platform built specifically for New Zealand farming operations.
+# farmHUB™ 
+is a private, all-in-one farm management platform built specifically for New Zealand farming operations.
 
 It integrates stock management, job tracking, animal health records, sales performance, and GPS-based farm mapping into a single, multi-platform system. Designed for real-world rural conditions, farmHUB™ prioritises reliability, real-time coordination, and future offline-first capability.
 
-##Core Features
+## Core Features
 - Live GPS farm tracking
 - Real-time weather forecasting
 - Stock class management and treatment tracking
@@ -20,10 +21,10 @@ It integrates stock management, job tracking, animal health records, sales perfo
 - Stock sales and farm purchases tracking
 - Integrated diary logging
 
-##Upcoming additions
+## Upcoming additions
 - NAIT system integration
 - Tru-Test device compatibility
 - Current Status
 
-##STATUS
+## STATUS
 - Actively under development for private deployment at Tarere Station, New Zealand.

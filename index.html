@@ -928,7 +928,7 @@ flex-wrap:nowrap;
 <div class="toast" id="toast"></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
-const STORAGE_KEY = 'farmwise_tarere_v2_requested_changes';
+const STORAGE_KEY = 'farmwise_tarere_v3_requested_changes';
 
 const defaultState = {
   role: 'manager',
@@ -1024,9 +1024,35 @@ const medicationDefaults = {
 
 function loadState(){
   try{
-    return {...defaultState, ...(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {})};
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+    return {
+      ...defaultState,
+      ...saved,
+      farmInfo: {
+        ...defaultState.farmInfo,
+        ...(saved.farmInfo || {})
+      },
+      widgetOrder: Array.isArray(saved.widgetOrder) && saved.widgetOrder.length
+        ? saved.widgetOrder
+        : defaultState.widgetOrder,
+      widgetSizes: {
+        ...defaultState.widgetSizes,
+        ...(saved.widgetSizes || {})
+      },
+      widgetPositions: {
+        ...defaultState.widgetPositions,
+        ...(saved.widgetPositions || {})
+      }
+    };
   }catch(e){
-    return {...defaultState};
+    return {
+      ...defaultState,
+      farmInfo: { ...defaultState.farmInfo },
+      widgetOrder: [...defaultState.widgetOrder],
+      widgetSizes: { ...defaultState.widgetSizes },
+      widgetPositions: { ...defaultState.widgetPositions }
+    };
   }
 }
 const state = loadState();

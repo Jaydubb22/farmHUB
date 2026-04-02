@@ -1162,18 +1162,28 @@ function renderWorkerChecklist(){
 }
 function selectedJobWorkers(){ return Array.from(document.querySelectorAll('.job-worker-check:checked')).map(x=>x.value); }
 function syncHealthAmount(){
-  const medication = $('healthMedication')?.value || '';
-  const klass = $('healthAnimalClass')?.value || '';
+  const medicationEl = $('healthMedication');
+  const classEl = $('healthAnimalClass');
+  const amountEl = $('healthAmount');
+
+  const medication = medicationEl ? medicationEl.value : '';
+  const klass = classEl ? classEl.value : '';
   const amount = medicationDefaults[medication]?.[klass] || '';
-  if ($('healthAmount')) $('healthAmount').value = amount;
+
+  if (amountEl) amountEl.value = amount;
 }
 function renderTallyClassOptions(){
-  const type = $('tallyStockType').value || 'Sheep';
+  const tallyTypeEl = $('tallyStockType');
+  const type = tallyTypeEl ? tallyTypeEl.value : 'Sheep';
   fillSelect('tallyClass', type === 'Sheep' ? sheepClasses : cattleClasses);
 }
-$('tallyStockType').addEventListener('change', renderTallyClassOptions);
-$('healthMedication').addEventListener('change', syncHealthAmount);
-$('healthAnimalClass').addEventListener('change', syncHealthAmount);
+const tallyStockTypeEl = $('tallyStockType');
+const healthMedicationEl = $('healthMedication');
+const healthAnimalClassEl = $('healthAnimalClass');
+
+if (tallyStockTypeEl) tallyStockTypeEl.addEventListener('change', renderTallyClassOptions);
+if (healthMedicationEl) healthMedicationEl.addEventListener('change', syncHealthAmount);
+if (healthAnimalClassEl) healthAnimalClassEl.addEventListener('change', syncHealthAmount);
 
 function renderJobs(){
   const list = $('jobList');

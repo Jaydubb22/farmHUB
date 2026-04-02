@@ -488,7 +488,7 @@ flex-wrap:nowrap;
       <label>PGG Wrightson Client No.</label>
       <input id="farmPggInput" type="text" placeholder="Enter PGG client number">
     </div>
-    <button class="btn btn-primary" type="button" onclick="saveFarmInfo()">Save Farm Info</button>
+    <button class="btn btn-primary" type="button" id="saveFarmInfoBtn">Save Farm Info</button>
   </div>
 </div>
 <div class="widget-grid" id="widgetGrid"></div>
@@ -966,7 +966,7 @@ if (!Array.isArray(state.widgetOrder) || !state.widgetOrder.length) {
   state.widgetOrder = ['stock','revenue','farminfo','map','jobs','calendar'];
 }
 
-window.saveFarmInfo = function(){
+function saveFarmInfo(){
   if (!state.farmInfo) state.farmInfo = {};
 
   const naitInput = document.getElementById('farmNaitInput');
@@ -980,8 +980,13 @@ window.saveFarmInfo = function(){
   populateFarmInfoInputs();
 
   if (typeof toast === 'function') toast('Farm info saved.');
-};
+}
 
+  document.addEventListener('click', (e) => {
+  if (e.target && e.target.id === 'saveFarmInfoBtn') {
+    saveFarmInfo();
+  }
+});
 function populateFarmInfoInputs(){
   const naitInput = document.getElementById('farmNaitInput');
   const pggInput = document.getElementById('farmPggInput');

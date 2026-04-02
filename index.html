@@ -36,6 +36,20 @@ a{color:inherit;text-decoration:none}
 .hidden{display:none !important}
 
 
+.calendar-layout{
+  display:grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap:14px;
+}
+
+.calendar-layout.full-calendar{
+  grid-template-columns: 1fr;
+}
+
+.calendar-layout.full-calendar #calendarUpcomingPanel{
+  display:none;
+}
+  
 .app-header{
 display:flex;
 justify-content:center;
@@ -787,8 +801,8 @@ flex-wrap:nowrap;
   </section>
 
 <section class="tab" id="tab-calendar">
-  <div class="grid two">
-    <div class="panel">
+  <div id="calendarLayout" class="calendar-layout">
+    <div class="panel" id="calendarMainPanel">
       <div class="panel-head">
         <div><h2>Calendar</h2><p id="calendarMonthLabel" style="margin:4px 0 0;color:var(--muted)"></p></div>
         <div class="calendar-toolbar">
@@ -804,7 +818,7 @@ flex-wrap:nowrap;
         </div>
       </div>
     </div>
-    <div class="panel">
+    <div class="panel" id="calendarUpcomingPanel">
       <div class="panel-head"><h2>Upcoming events</h2></div>
       <div class="panel-body"><div id="eventList" class="stack"></div></div>
     </div>
@@ -1652,7 +1666,23 @@ $('customizeDashboardBtn').addEventListener('click', () => {
   renderDashboard();
 });
 
+function updateCalendarLayout(){
+  const layout = $('calendarLayout');
+  const upcomingPanel = $('calendarUpcomingPanel');
+  const eventList = $('eventList');
 
+  if (!layout || !upcomingPanel || !eventList) return;
+
+  const hasEvents = eventList.children.length > 0;
+
+  if (hasEvents) {
+    layout.classList.remove('full-calendar');
+    upcomingPanel.style.display = '';
+  } else {
+    layout.classList.add('full-calendar');
+    upcomingPanel.style.display = 'none';
+  }
+}
 function renderCalendar(){
   const now = new Date();
   const shown = new Date(now.getFullYear(), now.getMonth() + Number(state.calendarMonthOffset || 0), 1);
@@ -1693,6 +1723,7 @@ function renderCalendar(){
         <div class="list-right"><strong>${fmtDate(e.date)}</strong></div>
       </div>`).join('') : '<div class="empty">No upcoming events.</div>';
   }
+      updateCalendarLayout();
 }
 
 $('calendarPrevBtn').addEventListener('click', ()=>{ state.calendarMonthOffset -= 1; saveAll(); renderCalendar(); });

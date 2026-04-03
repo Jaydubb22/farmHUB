@@ -1198,11 +1198,11 @@ function syncStaticFields(){
   fillSelect('visitorHost', workers);
   fillSelect('incidentReporter', workers);
   $('mapPaddockCount').textContent = paddockNames.length;
-  $('healthDate').value ||= today();
-  $('healthUntil').value ||= addDays(today(), 180);
-  $('saleDate').value ||= today();
-  $('purchaseDate').value ||= today();
-  $('incidentDate').value ||= today();
+  if ($('healthDate')) $('healthDate').value ||= today();
+  if ($('healthUntil')) $('healthUntil').value ||= addDays(today(), 180);
+  if ($('saleDate')) $('saleDate').value ||= today();
+  if ($('purchaseDate')) $('purchaseDate').value ||= today();
+  if ($('incidentDate')) $('incidentDate').value ||= today();
   renderWorkerChecklist();
   renderTallyClassOptions();
   syncHealthAmount();

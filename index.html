@@ -1207,9 +1207,23 @@ function syncStaticFields(){
   renderTallyClassOptions();
   syncHealthAmount();
 }
-function renderWorkerChecklist(){
-  const wrap=$('jobWorkerChecklist'); if(!wrap) return;
-  wrap.innerHTML = workers.map(w=>`<label style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:#fff"><input type="checkbox" class="job-worker-check" value="${esc(w)}"> <span>${esc(w)}</span></label>`).join('');
+function renderWorkerChecklist(selectedWorkers = []) {
+  const wrap = $('jobWorkerChecklist');
+  if (!wrap) return;
+
+  const workers = getWorkerNames();
+
+  if (!workers.length) {
+    wrap.innerHTML = `<div class="worker-check-empty">No workers added yet.</div>`;
+    return;
+  }
+
+  wrap.innerHTML = workers.map(name => `
+    <label class="worker-check-item">
+      <input type="checkbox" class="job-worker-check" value="${esc(name)}" ${selectedWorkers.includes(name) ? 'checked' : ''}>
+      <span>${esc(name)}</span>
+    </label>
+  `).join('');
 }
 function selectedJobWorkers(){ return Array.from(document.querySelectorAll('.job-worker-check:checked')).map(x=>x.value); }
 function syncHealthAmount(){

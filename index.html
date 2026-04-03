@@ -1197,12 +1197,15 @@ function syncStaticFields(){
   fillSelect('chatWorkerPicker', workers.filter(w => w !== state.currentUser));
   fillSelect('visitorHost', workers);
   fillSelect('incidentReporter', workers);
-  $('mapPaddockCount').textContent = paddockNames.length;
+
+  if ($('mapPaddockCount')) $('mapPaddockCount').textContent = paddockNames.length;
+
   if ($('healthDate')) $('healthDate').value ||= today();
   if ($('healthUntil')) $('healthUntil').value ||= addDays(today(), 180);
   if ($('saleDate')) $('saleDate').value ||= today();
   if ($('purchaseDate')) $('purchaseDate').value ||= today();
   if ($('incidentDate')) $('incidentDate').value ||= today();
+
   renderWorkerChecklist();
   renderTallyClassOptions();
   syncHealthAmount();

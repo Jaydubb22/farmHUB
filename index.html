@@ -935,7 +935,9 @@ flex-wrap:nowrap;
 
 <section class="tab" id="tab-diary">
   <div class="panel"><div class="panel-head"><h2>Diary</h2></div>
-  <div class="panel-body">Farm diary/log entries here.</div></div>
+  <div class="panel-body">
+  <div id="diaryList" class="stack"></div>
+</div>
 </section>
 </main>
 
@@ -960,6 +962,7 @@ const defaultState = {
   lastKnownLocation: null,
   messages: [],
   jobs: [],
+  diaryEntries: [],
   health: [],
   healthOccurrences: [],
   handling: [],
@@ -1224,6 +1227,7 @@ window.markJobComplete = function(id, input){
   Promise.all(proms).then(photos => {
     job.status='Done';
     job.completedAt=new Date().toISOString();
+    ensureJobDiaryEntry(job);
     if(photos.length) job.completionPhotos = (job.completionPhotos||[]).concat(photos);
     saveAll();
     renderAll();
@@ -1255,6 +1259,9 @@ function addJob(){
       completionPhotos: photoObjs,
       completedAt: $('jobStatus').value === 'Done' ? new Date().toISOString() : ''
     });
+        
+   ensureJobDiaryEntry(state.jobs[0]);
+    
     ['jobTitle','jobNotes','jobDue'].forEach(id => { if($(id)) $(id).value = ''; });
     $('jobCompletionPhotos').value='';
     document.querySelectorAll('.job-worker-check').forEach(x=>x.checked=false);
@@ -2436,6 +2443,9 @@ function renderAll(){
 renderHazards();
 renderAccidents();
   renderNotifications();
+
+  syncCompletedJobsToDiary();
+renderDiary();
 }
 
 $$('[data-summary-view]').forEach(btn => btn.addEventListener('click', ()=>{

@@ -600,7 +600,7 @@ flex-wrap:nowrap;
 <div class="grid two">
 <div>
 <div class="inline-fields four">
-<div class="field"><label>Worker</label><select id="handlingWorker"></select></div>
+<div id="handlingWorkerChecklist" class="stack"></div>
 <div class="field"><label>Animal class</label><select id="handlingAnimalClass"></select></div>
 <div class="field"><label>Paddock</label><select id="handlingPaddock"></select></div>
 <div class="field"><label>Pen</label><select id="handlingPen"><option>Pen 1</option><option>Pen 2</option><option>Pen 3</option><option>Pen 4</option><option>Pen 5</option><option>Pen 6</option></select></div>
@@ -1152,12 +1152,42 @@ function fillSelect(id, items){
   el.innerHTML = items.map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join('');
   if (items.includes(current)) el.value = current;
 }
+  function renderHandlingWorkerChecklist(selectedWorkers = []) {
+  const container = document.getElementById("handlingWorkerChecklist");
+  if (!container) return;
+
+  const workers = getWorkerNames();
+  if (!workers.length) {
+    container.innerHTML = `<div class="worker-check-empty">No workers added yet.</div>`;
+    return;
+  }
+
+  container.innerHTML = workers.map(name => `
+    <label class="worker-check-item">
+      <input type="checkbox" class="handling-worker-box" value="${esc(name)}" ${selectedWorkers.includes(name) ? "checked" : ""}>
+      <span>${esc(name)}</span>
+    </label>
+  `).join("");
+}
+
+function getHandlingCheckedWorkers() {
+  const container = document.getElementById("handlingWorkerChecklist");
+  if (!container) return [];
+  return [...container.querySelectorAll(".handling-worker-box:checked")].map(box => box.value);
+}
+
+function clearHandlingCheckedWorkers() {
+  const container = document.getElementById("handlingWorkerChecklist");
+  if (!container) return;
+  container.querySelectorAll(".handling-worker-box").forEach(box => {
+    box.checked = false;
+  });
+}
 function syncStaticFields(){
   fillSelect('jobPaddock', paddockNames);
   fillSelect('healthAnimalClass', animalClasses);
   fillSelect('healthPaddock', paddockNames);
   fillSelect('healthWorker', workers);
-  fillSelect('handlingWorker', workers);
   fillSelect('handlingAnimalClass', animalClasses);
   fillSelect('handlingPaddock', paddockNames);
   fillSelect('chatWorkerPicker', workers.filter(w => w !== state.currentUser));
@@ -2423,6 +2453,7 @@ function sendMessage(){
 }
 
 function renderAll(){
+  renderHandlingWorkerChecklist();
   syncStaticFields();
   switchTab(state.currentTab);
   renderJobs();
@@ -2614,6 +2645,28 @@ background:rgba(255,255,255,0.25);
   z-index:1;
   background:transparent;
   box-shadow:none;
+}
+
+.worker-check-empty{
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.worker-check-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:var(--panel-2);
+  margin-bottom:8px;
+}
+
+.worker-check-item input[type="checkbox"]{
+  width:18px;
+  height:18px;
+  margin:0;
 }
 
 </style>

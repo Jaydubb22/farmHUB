@@ -1152,6 +1152,10 @@ function fillSelect(id, items){
   el.innerHTML = items.map(x => `<option value="${esc(x)}">${esc(x)}</option>`).join('');
   if (items.includes(current)) el.value = current;
 }
+  function getWorkerNames() {
+  return ['Jess & Willie'];
+}
+  
   function renderHandlingWorkerChecklist(selectedWorkers = []) {
   const container = document.getElementById("handlingWorkerChecklist");
   if (!container) return;

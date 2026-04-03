@@ -945,7 +945,8 @@ flex-wrap:nowrap;
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
 const STORAGE_KEY = 'farmwise_tarere_v3_requested_changes';
-
+let paddockNames = [];
+  
 const defaultState = {
   role: 'manager',
   currentUser: 'Jess',
@@ -2763,6 +2764,44 @@ document.addEventListener('DOMContentLoaded', function(){
   updateNotificationBadges();
 });
 
+  async function loadPaddockNamesFromGeoJSON() {
+  try {
+    const res = await fetch('./paddocks.json');
+    if (!res.ok) throw new Error(`Failed to load paddocks.json: ${res.status}`);
+
+    const geo = await res.json();
+    const features = Array.isArray(geo.features) ? geo.features : [];
+
+    paddockNames = features
+      .map(f => {
+        const p = f.properties || {};
+        return (
+          p.name ||
+          p.Name ||
+          p.Paddock ||
+          p.paddock ||
+          p.block ||
+          p.Block ||
+          p.title ||
+          p.Title ||
+          ''
+        );
+      })
+      .map(x => String(x).trim())
+      .filter(Boolean);
+
+    paddockNames = [...new Set(paddockNames)].sort((a, b) => a.localeCompare(b));
+
+    syncStaticFields();
+    renderAll();
+
+    console.log('Loaded paddocks:', paddockNames);
+  } catch (err) {
+    console.error('GeoJSON load failed:', err);
+  }
+}
+
+window.addEventListener('load', loadPaddockNamesFromGeoJSON);
 </script>
 </body>
 </html>
